@@ -206,7 +206,7 @@ def run():
         #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
         
         # Hyper-parameters for training
-        epochs = 15
+        epochs = 30
         batch_size = 5
         
         # Create TensorFlow placeholders
