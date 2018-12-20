@@ -192,11 +192,12 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
                                feed_dict={input_image: image, 
                                           correct_label: label, 
                                           keep_prob: 0.5, 
-                                          learning_rate: 0.0001})
+                                          learning_rate: 0.001})
             epoch_losses.append(float(loss))
             print('.', end='', flush=True)
-        print("")
-        print("Epoch {} ".format(epoch+1), end='')
+        print("\rEpoch {} ".format(epoch+1), end='')
+#        print("")
+#        print("Epoch {} ".format(epoch+1), end='')
         print("average loss: = {:.3f}".format(np.mean(epoch_losses))) 
     print("Training finished!")
 tests.test_train_nn(train_nn)
