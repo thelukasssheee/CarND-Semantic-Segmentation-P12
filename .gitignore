@@ -45,6 +45,7 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
+keep_alive.py
 
 # Translations
 *.mo
@@ -101,3 +102,4 @@ ENV/
 .mypy_cache/
 
 RUNS/
+runs/

@@ -63,9 +63,9 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     l2_reg_scale = 0.001
     
     # Freeze output layers of underlying VGG16 pre-trained model
-    vgg_layer7_out = tf.stop_gradient(vgg_layer7_out)
-    vgg_layer4_out = tf.stop_gradient(vgg_layer4_out)
-    vgg_layer3_out = tf.stop_gradient(vgg_layer3_out)
+    #vgg_layer7_out = tf.stop_gradient(vgg_layer7_out)
+    #vgg_layer4_out = tf.stop_gradient(vgg_layer4_out)
+    #vgg_layer3_out = tf.stop_gradient(vgg_layer3_out)
     
     """ 
     VGG layer 7 level 
@@ -192,14 +192,13 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
                                feed_dict={input_image: image, 
                                           correct_label: label, 
                                           keep_prob: 0.8, 
-                                          learning_rate: 0.0002})
+                                          learning_rate: 0.00025})
             epoch_losses.append(float(loss))
             print('.', end='', flush=True)
         print("\rEpoch {} ".format(epoch+1), end='')
 #        print("")
 #        print("Epoch {} ".format(epoch+1), end='')
         print("average loss: = {:.3f}".format(np.mean(epoch_losses))) 
-    print("Training finished!")
 tests.test_train_nn(train_nn)
 
 
@@ -228,7 +227,7 @@ def run():
         #  https://datascience.stackexchange.com/questions/5224/how-to-prepare-augment-images-for-neural-network
         
         # Hyper-parameters for training
-        epochs = 30
+        epochs = 60
         batch_size = 5
         
         # Create TensorFlow placeholders
