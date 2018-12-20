@@ -57,7 +57,9 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     :param num_classes: Number of classes to classify
     :return: The Tensor for the last layer of output
     """
-    # TODO: Implement function, classroom DECODER
+    # Hyperparameters used for tuning
+    init_stddev = 0.1
+    l2_reg_scale = 0.001
     
     """ 
     VGG layer 7 level 
@@ -67,8 +69,8 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
                                      1, 
                                      strides=(1,1),
                                      padding='same', 
-                                     kernel_initializer=tf.truncated_normal_initializer(stddev=0.5),
-                                     kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001))
+                                     kernel_initializer=tf.random_normal_initializer(stddev=init_stddev),
+                                     kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
     
     """ 
     VGG layer 4 level 
@@ -78,15 +80,15 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
                                              4, 
                                              strides=(2,2), 
                                              padding='same', 
-                                             kernel_initializer=tf.truncated_normal_initializer(stddev=0.5),
-                                             kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001))
+                                             kernel_initializer=tf.random_normal_initializer(stddev=init_stddev),
+                                             kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
     # Feed in layer 4 from VGG with a 1x1 convolution
     layer4_fc_2 = tf.layers.conv2d(vgg_layer4_out, num_classes,
                                    1,
                                    strides=(1,1),
                                    padding='same',
-                                   kernel_initializer=tf.truncated_normal_initializer(stddev=0.5),
-                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001))
+                                   kernel_initializer=tf.random_normal_initializer(stddev=init_stddev),
+                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
     # Add skip-connection (element-wise addition)
     layer4_fc_out = tf.add(layer4_fc_1, layer4_fc_2)
     
@@ -98,15 +100,15 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
                                              4,
                                              strides=(2,2),
                                              padding='same',
-                                             kernel_initializer=tf.truncated_normal_initializer(stddev=0.5),
-                                             kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001))
+                                             kernel_initializer=tf.random_normal_initializer(stddev=init_stddev),
+                                             kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
     # Feed in layer 3 from VGG with a 1x1 convolution
     layer3_fc_2 = tf.layers.conv2d(vgg_layer3_out, num_classes,
                                    1,
                                    strides=(1,1),
                                    padding='same',
-                                   kernel_initializer=tf.truncated_normal_initializer(stddev=0.5),
-                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001))    
+                                   kernel_initializer=tf.random_normal_initializer(stddev=init_stddev),
+                                   kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))   
     # Add skip-connection (element-wise addition)
     layer3_fc_out = tf.add(layer3_fc_1, layer3_fc_2)
     
@@ -117,8 +119,8 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
                                                16,
                                                strides=(8,8),
                                                padding='same',
-                                               kernel_initializer=tf.truncated_normal_initializer(stddev=0.5),
-                                               kernel_regularizer=tf.contrib.layers.l2_regularizer(0.001))
+                                               kernel_initializer=tf.random_normal_initializer(stddev=init_stddev),
+                                               kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg_scale))
     # Print debugging output
     #tf.Print(output, [tf.shape(output)[:]])
     # Return final layer
