@@ -63,9 +63,9 @@ def layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes):
     l2_reg_scale = 0.001
     
     # Freeze output layers of underlying VGG16 pre-trained model
-    #vgg_layer7_out = tf.stop_gradient(vgg_layer7_out)
-    #vgg_layer4_out = tf.stop_gradient(vgg_layer4_out)
-    #vgg_layer3_out = tf.stop_gradient(vgg_layer3_out)
+    vgg_layer7_out = tf.stop_gradient(vgg_layer7_out)
+    vgg_layer4_out = tf.stop_gradient(vgg_layer4_out)
+    vgg_layer3_out = tf.stop_gradient(vgg_layer3_out)
     
     """ 
     VGG layer 7 level 
@@ -180,8 +180,8 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
     # TODO: Implement function
     sess.run(tf.global_variables_initializer())
     
-    print('Training for {} epochs is about to start... '.format(epochs))
     print()
+    print('Training for {} epochs is about to start... '.format(epochs))
     for epoch in range(epochs):
         print("Epoch {} ...".format(epoch+1), end='')
         # Create empty array to hold temporary losses
@@ -191,8 +191,8 @@ def train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_l
             _, loss = sess.run([train_op, cross_entropy_loss],
                                feed_dict={input_image: image, 
                                           correct_label: label, 
-                                          keep_prob: 0.5, 
-                                          learning_rate: 0.001})
+                                          keep_prob: 0.8, 
+                                          learning_rate: 0.0002})
             epoch_losses.append(float(loss))
             print('.', end='', flush=True)
         print("\rEpoch {} ".format(epoch+1), end='')
@@ -208,7 +208,7 @@ def run():
     image_shape = (160, 576)
     data_dir = '/data'
     runs_dir = './runs'
-    model_dir = './models'
+    models_dir = './models'
     tests.test_for_kitti_dataset(data_dir)
 
     # Download pretrained vgg model
@@ -236,21 +236,29 @@ def run():
         learning_rate = tf.placeholder(tf.float32, name='learning_rate')
 
         # Extract layers from VGG
-        input_image, keep_prob, vgg_layer3_out, vgg_layer4_out, vgg_layer7_out = load_vgg(sess, vgg_path)
+        input_image, keep_prob, vgg_layer3_out, vgg_layer4_out, vgg_layer7_out = \
+            load_vgg(sess, vgg_path)
         
         # Create new layers
-        nn_last_layer = layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)  # Final layer we just built
+        nn_last_layer = \
+            layers(vgg_layer3_out, vgg_layer4_out, vgg_layer7_out, num_classes)  # Final layer we just built
         
         # Create function for loss & optimizer
-        logits, train_op, cross_entropy_loss = optimize(nn_last_layer, correct_label, learning_rate, num_classes)
+        logits, train_op, cross_entropy_loss = \
+            optimize(nn_last_layer, correct_label, learning_rate, num_classes)
+        
+        # Saver operation to save and restore all variables
+        saver = tf.train.Saver()
         
         # Train NN using the train_nn function
-        saver = tf.train.Saver()
         train_nn(sess, epochs, batch_size, get_batches_fn, train_op, cross_entropy_loss, input_image,
                  correct_label, keep_prob, learning_rate)
+#        model_fullpath = models_dir + '/testmodel.
+#        save_path = saver.save(sess,models_dir+/testmodel)
+#        print("Model saved as file: %s" %save_path)
         
         # TODO: Save inference data using helper.save_inference_samples
-        helper.save_inference_samples(model_dir, runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
+        helper.save_inference_samples(runs_dir, data_dir, sess, image_shape, logits, keep_prob, input_image)
 
         # OPTIONAL: Apply the trained model to a video
         
