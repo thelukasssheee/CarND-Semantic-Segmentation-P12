@@ -103,3 +103,5 @@ ENV/
 
 RUNS/
 runs/
+
+.DS_Store
