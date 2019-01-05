@@ -6,7 +6,7 @@ by Michael Berner, Student @ Udacity, March 2018 class
 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
--
+---
 
 ### Overview
 The task in this project was to create a **fully convolutional neural network** to perform semantic segmentation of image data. 
@@ -146,7 +146,7 @@ As for all projects, this one was again a lot of fun after initial challenges an
 I would have enjoyed to tweak this even further, but, as always, time is limited. 
 
 
--
+---
 
 ## Original Readme by Udacity
 
